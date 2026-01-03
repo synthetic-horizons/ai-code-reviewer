@@ -506,11 +506,11 @@ This project is provided as-is for educational and commercial use. Customize it 
 
 ## 👥 About
 
-**Created by François Bossière, CEO of [Polynom](https://www.polynom.io)**
+**Created by François Bossière, co-CEO of [Polynom](https://www.polynom.io)**
 
 *Polynom is an AI Consulting firm specialized in building high impact Data & AI products.*
 
-**Contact**: <francois@polynom.io>
+**Contact**: <francois@synthetic-horizons.com>
 
 ### Philosophy
 
