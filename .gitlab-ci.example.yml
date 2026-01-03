@@ -1,0 +1,100 @@
+# Example GitLab CI Configuration with LLM Code Review
+# 
+# Setup Instructions:
+# 1. Copy llm_mr_review.py to your repository at: scripts/python/llm_mr_review.py
+# 2. Add this job configuration to your .gitlab-ci.yml
+# 3. Set the following CI/CD variables in your GitLab project settings:
+#    - OPENROUTER_API_KEY (required): Your OpenRouter API key from https://openrouter.ai
+#    - LLM_MODEL (required): The model to use (e.g., anthropic/claude-sonnet-4.5 for OpenRouter)
+#    - GITLAB_PRIVATE_TOKEN (optional): GitLab personal access token (uses CI_JOB_TOKEN if not provided)
+#
+# For more information, visit: https://www.polynom.io
+
+# Simple standalone implementation
+LLM Code Review:
+  image: python:3.13-slim
+  stage: test
+  allow_failure: true
+  script:
+    - pip install requests
+    - python scripts/python/llm_mr_review.py
+  only:
+    - merge_requests
+
+# ===== Alternative: Integration with existing test base =====
+# If you have a base test configuration, you can extend it:
+#
+# .base_test:
+#   image: python:3.13-slim
+#   stage: test
+#   interruptible: true
+#   only:
+#     - merge_requests
+#   before_script:
+#     - pip install uv
+#     - uv venv .venv
+#     - source .venv/bin/activate
+#     - uv sync
+#
+# LLM Code Review:
+#   extends: .base_test
+#   allow_failure: true
+#   script:
+#     - uv pip install requests
+#     - python scripts/python/llm_mr_review.py
+
+# ===== Full example with multiple quality gates =====
+# 
+# variables:
+#   app_name: my-awesome-app
+#   python_version: python:3.13-slim
+#
+# stages:
+#   - test
+#   - build
+#   - deploy
+#
+# .base_test:
+#   image: python:3.13-slim
+#   stage: test
+#   interruptible: true
+#   only:
+#     - merge_requests
+#   before_script:
+#     - pip install uv
+#     - uv venv .venv
+#     - source .venv/bin/activate
+#     - uv sync
+#
+# # AI-powered code review
+# LLM Code Review:
+#   extends: .base_test
+#   allow_failure: true
+#   script:
+#     - uv pip install requests
+#     - python scripts/python/llm_mr_review.py
+#
+# # Static type checking with Pyright
+# Pyright:
+#   extends: .base_test
+#   script:
+#     - pyright src --outputjson > report_pyright_raw.json || true
+#     - pyright-to-gitlab-ci --src report_pyright_raw.json --output report_pyright.json --base_path .
+#   artifacts:
+#     reports:
+#       codequality: report_pyright.json
+#
+# # Linting with Ruff
+# Ruff Check:
+#   extends: .base_test
+#   script:
+#     - ruff check --output-format=gitlab > code-quality-report.json || true
+#   artifacts:
+#     reports:
+#       codequality: code-quality-report.json
+#
+# # Code formatting with Ruff
+# Ruff Format:
+#   extends: .base_test
+#   script:
+#     - ruff format --diff

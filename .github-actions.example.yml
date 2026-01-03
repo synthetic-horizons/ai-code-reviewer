@@ -1,0 +1,225 @@
+# Example GitHub Actions Workflow with LLM Code Review
+# 
+# Setup Instructions:
+# 1. Copy llm_reviewer.py to your repository at: scripts/python/llm_reviewer.py
+# 2. Create a new workflow file in your repository: .github/workflows/llm-code-review.yml
+# 3. Copy the content from this example file to that workflow file
+# 4. Set the following in your GitHub repository settings (Settings > Secrets and variables > Actions):
+#    Secrets:
+#      - OPENROUTER_API_KEY (required): Your OpenRouter API key from https://openrouter.ai
+#      - LLM_MODEL (required): The model to use (e.g., anthropic/claude-sonnet-4.5 for OpenRouter)
+#      - GITHUB_TOKEN (automatic): GitHub automatically provides this token for API access
+#    Variables:
+#
+# For more information, visit: https://www.polynom.io
+
+name: LLM Code Review
+
+# Simple standalone implementation
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  llm-code-review:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    env:
+      OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+      LLM_MODEL: ${{ vars.LLM_MODEL }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      
+      - name: Install dependencies
+        run: pip install requests
+      
+      - name: Run LLM Code Review
+        run: python scripts/python/llm_reviewer.py
+
+# ===== Alternative: Integration with existing test setup =====
+# If you have a base test configuration, you can create reusable steps:
+#
+# name: LLM Code Review with UV
+# 
+# on:
+#   pull_request:
+#     types: [opened, synchronize, reopened]
+# 
+# jobs:
+#   llm-code-review:
+#     runs-on: ubuntu-latest
+#     continue-on-error: true
+#     env:
+#       OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+#       LLM_MODEL: ${{ vars.LLM_MODEL }}
+#       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#     
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+#         with:
+#           fetch-depth: 0
+#       
+#       - name: Set up Python
+#         uses: actions/setup-python@v5
+#         with:
+#           python-version: '3.13'
+#       
+#       - name: Install UV
+#         run: pip install uv
+#       
+#       - name: Setup virtual environment
+#         run: |
+#           uv venv .venv
+#           source .venv/bin/activate
+#           uv sync
+#       
+#       - name: Install requests
+#         run: |
+#           source .venv/bin/activate
+#           uv pip install requests
+#       
+#       - name: Run LLM Code Review
+#         run: |
+#           source .venv/bin/activate
+#           python scripts/python/llm_reviewer.py
+
+# ===== Full example with multiple quality gates =====
+# 
+# name: Quality Gates
+# 
+# on:
+#   pull_request:
+#     types: [opened, synchronize, reopened]
+# 
+# jobs:
+#   # AI-powered code review
+#   llm-code-review:
+#     runs-on: ubuntu-latest
+#     continue-on-error: true
+#     env:
+#       OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+#       LLM_MODEL: ${{ vars.LLM_MODEL }}
+#       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#     
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+#         with:
+#           fetch-depth: 0
+#       
+#       - name: Set up Python
+#         uses: actions/setup-python@v5
+#         with:
+#           python-version: '3.13'
+#       
+#       - name: Install UV
+#         run: pip install uv
+#       
+#       - name: Setup environment
+#         run: |
+#           uv venv .venv
+#           source .venv/bin/activate
+#           uv sync
+#           uv pip install requests
+#       
+#       - name: Run LLM Code Review
+#         run: |
+#           source .venv/bin/activate
+#           python scripts/python/llm_reviewer.py
+#   
+#   # Static type checking with Pyright
+#   pyright:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+#       
+#       - name: Set up Python
+#         uses: actions/setup-python@v5
+#         with:
+#           python-version: '3.13'
+#       
+#       - name: Install UV
+#         run: pip install uv
+#       
+#       - name: Setup environment
+#         run: |
+#           uv venv .venv
+#           source .venv/bin/activate
+#           uv sync
+#       
+#       - name: Run Pyright
+#         run: |
+#           source .venv/bin/activate
+#           pyright src --outputjson > report_pyright_raw.json || true
+#           pyright-to-gitlab-ci --src report_pyright_raw.json --output report_pyright.json --base_path .
+#       
+#       - name: Upload Pyright results
+#         uses: actions/upload-artifact@v4
+#         if: always()
+#         with:
+#           name: pyright-report
+#           path: report_pyright.json
+#   
+#   # Linting with Ruff
+#   ruff-check:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+#       
+#       - name: Set up Python
+#         uses: actions/setup-python@v5
+#         with:
+#           python-version: '3.13'
+#       
+#       - name: Install UV
+#         run: pip install uv
+#       
+#       - name: Setup environment
+#         run: |
+#           uv venv .venv
+#           source .venv/bin/activate
+#           uv sync
+#       
+#       - name: Run Ruff Check
+#         run: |
+#           source .venv/bin/activate
+#           ruff check --output-format=github
+#   
+#   # Code formatting with Ruff
+#   ruff-format:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+#       
+#       - name: Set up Python
+#         uses: actions/setup-python@v5
+#         with:
+#           python-version: '3.13'
+#       
+#       - name: Install UV
+#         run: pip install uv
+#       
+#       - name: Setup environment
+#         run: |
+#           uv venv .venv
+#           source .venv/bin/activate
+#           uv sync
+#       
+#       - name: Run Ruff Format
+#         run: |
+#           source .venv/bin/activate
+#           ruff format --diff
