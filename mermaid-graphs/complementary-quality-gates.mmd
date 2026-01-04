@@ -1,0 +1,32 @@
+%% Complementary Quality Gates Diagram
+%% Shows how different code quality tools work together in a comprehensive
+%% quality assurance pipeline
+%%
+%% Quality Gate Layers:
+%% 1. Linters & Type Checkers - Catches syntax errors, type issues
+%% 2. AI Code Review - Catches logic bugs, best practices, context issues
+%% 3. SAST/SonarQube - Catches known vulnerabilities (CWE/OWASP)
+%% 4. Human Architectural Review - Validates system design and business logic
+%%
+%% This layered approach provides defense-in-depth for code quality
+%%
+%% Color Legend:
+%% - Blue (#3B82F6): Starting point
+%% - Purple (#7C3AED): AI-powered quality gate
+%% - Green (#10B981): Final deployment
+
+graph TD
+    A[Code Change] --> B[Linters & Type Checkers]
+    B --> C[AI Code Review]
+    C --> D[SAST/SonarQube]
+    D --> E[Human Architectural Review]
+    E --> F[Merge & Deploy]
+    
+    B -.->|Catches| B1[Syntax Errors<br/>Type Issues]
+    C -.->|Catches| C1[Logic Bugs<br/>Best Practices<br/>Context Issues]
+    D -.->|Catches| D1[Known Vulnerabilities<br/>CWE/OWASP]
+    E -.->|Validates| E1[System Design<br/>Business Logic]
+    
+    style A fill:#3B82F6,color:#fff
+    style C fill:#7C3AED,color:#fff
+    style F fill:#10B981,color:#fff

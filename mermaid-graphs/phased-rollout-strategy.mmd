@@ -1,0 +1,33 @@
+%% Phased Rollout Strategy Diagram
+%% Illustrates the recommended approach for implementing AI code review
+%% across an organization, from pilot to full-scale deployment
+%%
+%% Phases:
+%% - Week 1: Pilot on 1-2 projects
+%%   Success Metric: 60%+ developer satisfaction
+%%
+%% - Weeks 2-4: Team Expansion to 10-20% of teams
+%%   Success Metric: <10% false positive rate
+%%
+%% - Month 2+: Organization-wide deployment
+%%   Success Metric: Measurable velocity impact
+%%
+%% This progressive approach minimizes risk and allows for
+%% continuous feedback and improvement
+%%
+%% Color Legend:
+%% - Blue (#3B82F6): Pilot phase
+%% - Purple (#7C3AED): Expansion phase
+%% - Green (#10B981): Full deployment
+
+graph LR
+    A[Week 1:<br/>Pilot<br/>1-2 Projects] --> B[Weeks 2-4:<br/>Team Expansion<br/>10-20%]
+    B --> C[Month 2+:<br/>Organization<br/>All Projects]
+    
+    A -.->|Metrics| A1[Developer<br/>Satisfaction<br/>60%+]
+    B -.->|Metrics| B1[False Positives<br/><10%]
+    C -.->|Metrics| C1[Velocity<br/>Impact<br/>Measured]
+    
+    style A fill:#3B82F6,color:#fff
+    style B fill:#7C3AED,color:#fff
+    style C fill:#10B981,color:#fff

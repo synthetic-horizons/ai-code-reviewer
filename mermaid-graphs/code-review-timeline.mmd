@@ -1,0 +1,29 @@
+%% Traditional vs AI-Augmented Review Timeline Comparison
+%% Gantt chart comparing the time impact of traditional vs. AI-augmented code review
+%%
+%% Key Insights:
+%% - Traditional: 7+ hours from PR/MR creation to merge
+%% - AI-Augmented: ~62 minutes from PR/MR creation to merge
+%% - Demonstrates ~85% reduction in review cycle time
+%%
+%% Time units are in minutes from start
+
+gantt
+    title Code Review Timeline Comparison
+    dateFormat X
+    axisFormat %H:%M
+    
+    section Traditional Review
+    PR/MR Created        :0, 1
+    Wait for Reviewer    :1, 240
+    Human Review         :240, 270
+    Developer Fixes      :270, 300
+    Re-Review            :300, 420
+    Merge                :420, 421
+    
+    section AI-Augmented Review
+    PR/MR Created (AI)   :0, 1
+    AI Review            :1, 2
+    Developer Fixes      :2, 32
+    Human Review         :32, 62
+    Merge                :62, 63

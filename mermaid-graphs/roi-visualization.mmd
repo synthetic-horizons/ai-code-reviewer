@@ -1,0 +1,47 @@
+%% ROI Visualization: Traditional vs AI-Augmented Process
+%% Compares the cost, wait time, and velocity impact of traditional
+%% human-only code review versus AI-augmented review process
+%%
+%% Traditional Process Costs:
+%% - $2,500-$5,000/month for 100 PRs/MRs
+%% - 4-24 hour wait times
+%% - Context switching overhead
+%% - Reduced velocity
+%%
+%% AI-Augmented Process Benefits:
+%% - $1-$5/month for 100 PRs/MRs
+%% - 10-30 second wait times
+%% - Instant feedback loop
+%% - Increased velocity
+%% - 50% reduction in senior engineer review time
+%%
+%% Color Legend:
+%% - Green (#10B981): Benefits/improvements
+%% - Red (#EF4444): Costs/problems
+
+graph TD
+    subgraph "Traditional Process"
+        A1[100 PRs/MRs per month] --> B1[Senior Engineer Reviews]
+        B1 --> C1[Cost: $2,500-$5,000/month]
+        B1 --> D1[Wait Time: 4-24 hours]
+        D1 --> E1[Context Switching]
+        E1 --> F1[Reduced Velocity]
+    end
+    
+    subgraph "AI-Augmented Process"
+        A2[100 PRs/MRs per month] --> B2[AI Pre-Review]
+        B2 --> C2[Cost: $1-$5/month]
+        B2 --> D2[Wait Time: 10-30 seconds]
+        D2 --> E2[Instant Feedback Loop]
+        E2 --> F2[Increased Velocity]
+        B2 --> G2[Human Review<br/>Architecture Only]
+        G2 --> H2[Senior Time: 50% Reduction]
+    end
+    
+    style C2 fill:#10B981,color:#fff
+    style D2 fill:#10B981,color:#fff
+    style F2 fill:#10B981,color:#fff
+    style H2 fill:#10B981,color:#fff
+    style C1 fill:#EF4444,color:#fff
+    style D1 fill:#EF4444,color:#fff
+    style F1 fill:#EF4444,color:#fff

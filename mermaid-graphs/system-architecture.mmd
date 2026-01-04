@@ -1,0 +1,33 @@
+%% AI Code Review System Architecture Diagram
+%% Shows the end-to-end flow of the AI code review system
+%%
+%% Components:
+%% - CI/CD pipeline integration (GitLab CI or GitHub Actions)
+%% - Python script execution environment
+%% - Platform API interactions (GitLab/GitHub)
+%% - OpenRouter API integration
+%% - AI model (anthropic/claude-sonnet-4.5) analysis
+%% - Feedback posting mechanism
+%%
+%% Color Legend:
+%% - Blue (#3B82F6): Entry point
+%% - Purple (#7C3AED): AI processing
+%% - Green (#10B981): Completion/output
+
+graph TD
+    A[PR/MR Created] --> B[CI Pipeline Triggered]
+    B --> C[ai_code_review Job Starts]
+    C --> D[Python Environment Setup]
+    D --> E[Fetch Changes via Platform API]
+    E --> F[Extract File Diffs]
+    F --> G[Detect Languages]
+    G --> H[Build Context-Aware Prompt]
+    H --> I[Send to OpenRouter API]
+    I --> J[anthropic/claude-sonnet-4.5 Analysis]
+    J --> K[Receive Review Feedback]
+    K --> L[Post Comment on PR/MR]
+    L --> M[Job Completes]
+    
+    style J fill:#7C3AED
+    style L fill:#10B981
+    style A fill:#3B82F6

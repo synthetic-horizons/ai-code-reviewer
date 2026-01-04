@@ -1,0 +1,26 @@
+%% Value Flow Diagram
+%% Illustrates the business value flow of AI-powered code review
+%% Shows how AI review transforms the development process by providing
+%% instant feedback and enabling senior engineers to focus on higher-value work
+%%
+%% Key Components:
+%% - Engineer workflow from PR/MR submission to production
+%% - AI review decision point for issue detection
+%% - Value streams: time saved, learning, quality standards
+
+graph LR
+    A[Engineer Submits PR/MR] --> B[AI Review: 10-30s]
+    B --> C{Issues Found?}
+    C -->|Yes| D[Developer Fixes Issues]
+    C -->|No| E[Human Review]
+    D --> E
+    E --> F[Merge to Production]
+    
+    B -.->|Time Saved| G[Senior Engineers<br/>Focus on Architecture]
+    B -.->|Learning| H[Junior Developers<br/>Instant Feedback]
+    B -.->|Quality| I[Consistent Standards<br/>24/7]
+    
+    style B fill:#7C3AED,color:#fff
+    style G fill:#10B981,color:#fff
+    style H fill:#10B981,color:#fff
+    style I fill:#10B981,color:#fff
